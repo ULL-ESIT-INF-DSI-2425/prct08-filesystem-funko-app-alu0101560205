@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { writeFile, readdir, readFile, unlink } from 'fs';
+import { writeFile, readdir, readFile, unlink, mkdir, access } from 'fs';
 import path from 'path';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
@@ -55,9 +55,15 @@ class FunkoCollection {
    */
   constructor(private user: string) {
     this.userDir = path.resolve('dist', 'collections', user);
-    if (!fs.existsSync(this.userDir)) {
-      fs.mkdirSync(this.userDir, { recursive: true });
-    }
+    access(this.userDir, (err) => {
+      if (err) {
+        mkdir(this.userDir, { recursive: true }, (mkdirErr) => {
+          if (mkdirErr) {
+            console.log(chalk.red('Error creating user directory!'));
+          }
+        });
+      }
+    });
   }
 
   /**
