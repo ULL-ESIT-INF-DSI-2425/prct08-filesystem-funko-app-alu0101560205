@@ -43,3 +43,24 @@ const deleteFile = (fileName: string): void => {
 }
 
 console.log(deleteFile("modif2.txt"));
+
+const moveFile = (fileName: string, destino: string): void => {
+  const filePath = path.resolve('dist', 'Dir_Modificacion', fileName);
+  const destinyPath = path.resolve(destino);
+  let contentOfTheFile: string = "";
+  readFile(filePath, (err, data) => {
+    if (err) {
+      console.log('There must be a problem with the file you are trying to read');
+    } else {
+      contentOfTheFile = data.toString();
+      writeFile(destinyPath, contentOfTheFile, (err) => {
+        // console.log(contentOfTheFile);
+        if (err) {
+          console.log('Something went wrong when writing your file');
+        } else {
+          console.log('File has just been moved');
+        }
+      });
+    }
+  });
+}
